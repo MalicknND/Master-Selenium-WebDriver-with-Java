@@ -66,8 +66,19 @@ public class ExeptionsTests {
 
         WebElement rowToInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
         Assert.assertTrue(rowToInputField.isDisplayed(), "Row 2 input field is not displayed");
+    }
 
+    @Test
+    public void timeoutExceptionTest() {
+        logger.info("Starting timeoutExceptionTest");
 
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        WebElement addBtn = driver.findElement(By.id("add_btn"));
+        addBtn.click();
+
+        WebElement rowToInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
+        Assert.assertTrue(rowToInputField.isDisplayed(), "Row 2 input field is not displayed");
     }
 
 }
