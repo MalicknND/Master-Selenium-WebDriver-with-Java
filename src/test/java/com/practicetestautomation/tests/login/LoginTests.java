@@ -4,24 +4,29 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
 import java.time.Duration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class LoginTests {
     private WebDriver driver;
+    private Logger logger;
 
     @BeforeMethod(alwaysRun = true)
     @Parameters("browser")
     public void setUp(@Optional("chrome") String browser) {
-        System.out.println("Running test in : " + browser);
+
+        logger = Logger.getLogger(LoginTests.class.getName());
+        logger.setLevel(Level.INFO);
+
+       logger.info("Running test in : " + browser);
         // Open page
 
         switch (browser.toLowerCase()) {
@@ -32,7 +37,7 @@ public class LoginTests {
                 driver = new FirefoxDriver();
                 break;
             default:
-                System.out.println("Config missing for browser: " + browser);
+                logger.warning("Config missing for browser: " + browser);
                 driver = new ChromeDriver();
                 break;
         }
@@ -42,23 +47,28 @@ public class LoginTests {
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
         driver.quit();
+        logger.info("Browser Closed");
     }
 
     @Test(groups = {"positive", "regression", "smoke"})
     public void testLoginFunctionality() {
 
+        logger.info("Start test login functionality");
 
         // Type username student into Username field
         WebElement usernameInput = driver.findElement(By.id("username"));
+        logger.info("Type username");
         usernameInput.sendKeys("student");
 
         // Type password Password123 into Password field
         WebElement passwordInput = driver.findElement(By.id("password"));
+        logger.info("Type password");
         passwordInput.sendKeys("Password123");
 
         // Push Submit button
         WebElement submitButton = driver.findElement(By.id("submit"));
         submitButton.isDisplayed();
+        logger.info("Click submit");
         submitButton.click();
 
         try {
@@ -68,6 +78,7 @@ public class LoginTests {
         }
 
         // Verify new page URL contains practicetestautomation.com/logged-in-successfully/
+        logger.info("Verify the login functionality");
         String expectedUrl = "https://practicetestautomation.com/logged-in-successfully/";
         String actualUrl = driver.getCurrentUrl();
         Assert.assertEquals(actualUrl, expectedUrl); //sert à vérifier que deux valeurs sont identiques dans TestNG.
@@ -86,19 +97,26 @@ public class LoginTests {
     @Test(groups = {"negative", "regression"})
     public void negativeLoginTest(String username, String password, String expectedErrorMessage) {
 
+        logger.info("Starting negative loging test");
+
         // Type username incorrectUser into Username field
         WebElement usernameInput = driver.findElement(By.id("username"));
+        logger.info("Typing username" + username);
         usernameInput.sendKeys(username);
 
         // Type password Password123 into Password field
         WebElement passwordInput = driver.findElement(By.id("password"));
+        logger.info("Typing password");
         passwordInput.sendKeys(password);
 
         // Push Submit button
         WebElement submitButton = driver.findElement(By.id("submit"));
+        logger.info("Clicking submit button");
         submitButton.click();
 
         // Verify error message is displayed
+        logger.info("Verify the expected error message " + expectedErrorMessage );
+
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         WebElement errorMessage = wait.until(
