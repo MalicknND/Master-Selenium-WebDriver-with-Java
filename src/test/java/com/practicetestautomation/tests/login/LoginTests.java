@@ -67,7 +67,6 @@ public class LoginTests {
 
         // Push Submit button
         WebElement submitButton = driver.findElement(By.id("submit"));
-        submitButton.isDisplayed();
         logger.info("Click submit");
         submitButton.click();
 

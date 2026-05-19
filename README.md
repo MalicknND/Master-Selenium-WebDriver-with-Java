@@ -1,4 +1,4 @@
-# SeleniumForBeginners
+# Master Selenium WebDriver with Java
 
 Projet d'apprentissage base sur le cours Udemy **Selenium WebDriver: Selenium Automation Testing with Java for Beginners** de Dmitry Shyshkin.
 
