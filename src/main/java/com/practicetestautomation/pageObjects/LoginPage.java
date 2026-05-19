@@ -33,10 +33,11 @@ public class LoginPage {
         driver.findElement(submitButtonLocator).click();
     }
 
-    public void executeLogin(String username, String password) {
+    public SuccessfullLoginPage executeLogin(String username, String password) {
         enterUsername(username);
         enterPassword(password);
         clickSubmitButton();
+        return new SuccessfullLoginPage(driver);
     }
 
     public String getErrorMessage() {
