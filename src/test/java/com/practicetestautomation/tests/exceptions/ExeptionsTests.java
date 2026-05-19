@@ -65,8 +65,8 @@ public class ExeptionsTests {
         WebElement addBtn = driver.findElement(By.id("add_btn"));
         addBtn.click();
 
-        WebElement rowToInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
-        Assert.assertTrue(rowToInputField.isDisplayed(), "Row 2 input field is not displayed");
+        WebElement row2InputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
+        Assert.assertTrue(row2InputField.isDisplayed(), "Row 2 input field is not displayed");
     }
 
     @Test
@@ -78,8 +78,8 @@ public class ExeptionsTests {
         WebElement addBtn = driver.findElement(By.id("add_btn"));
         addBtn.click();
 
-        WebElement rowToInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
-        Assert.assertTrue(rowToInputField.isDisplayed(), "Row 2 input field is not displayed");
+        WebElement row2InputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
+        Assert.assertTrue(row2InputField.isDisplayed(), "Row 2 input field is not displayed");
     }
 
     @Test
@@ -91,10 +91,10 @@ public class ExeptionsTests {
         WebElement addBtn = driver.findElement(By.id("add_btn"));
         addBtn.click();
 
-        WebElement rowToInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
-        rowToInputField.sendKeys("Sushi");
+        WebElement row2InputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
+        row2InputField.sendKeys("Sushi");
 
-
+        // il yavait plusieurs boutton Save
         WebElement saveBtn = driver.findElement(By.xpath("//div[@id='row2']/button[@name='Save']"));
         saveBtn.click();
 
@@ -106,6 +106,37 @@ public class ExeptionsTests {
         Assert.assertEquals(actualMessage, expectedMessage, "Message is not expected");
 
     }
+
+    @Test
+    public void invalidElementStateExceptionTest() {
+        logger.info("Starting elementNotInteractableExceptionTest");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // clique d'abord pour mettre le disable à false avant de clear et remplir pour eviter l'erreur
+        WebElement editBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("edit_btn")));
+        editBtn.click();
+
+        WebElement row1InputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row1']/input")));
+
+
+        row1InputField.clear();
+        row1InputField.sendKeys("Sushi");
+
+
+
+        WebElement saveBtn = driver.findElement(By.xpath("//div[@id='row1']/button[@name='Save']"));
+        saveBtn.click();
+
+        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("confirmation")));
+
+        String actualMessage = successMessage.getText();
+        String expectedMessage = "Row 1 was saved";
+
+        Assert.assertEquals(actualMessage, expectedMessage, "Message is not expected");
+
+    }
+
 
 }
 
