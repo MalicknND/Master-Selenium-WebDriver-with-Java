@@ -1,6 +1,7 @@
 package com.practicetestautomation.tests.exceptions;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -79,6 +80,31 @@ public class ExeptionsTests {
 
         WebElement rowToInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
         Assert.assertTrue(rowToInputField.isDisplayed(), "Row 2 input field is not displayed");
+    }
+
+    @Test
+    public void elementNotInteractableExceptionTest() {
+        logger.info("Starting elementNotInteractableExceptionTest");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        WebElement addBtn = driver.findElement(By.id("add_btn"));
+        addBtn.click();
+
+        WebElement rowToInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
+        rowToInputField.sendKeys("Sushi");
+
+
+        WebElement saveBtn = driver.findElement(By.xpath("//div[@id='row2']/button[@name='Save']"));
+        saveBtn.click();
+
+        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("confirmation")));
+
+        String actualMessage = successMessage.getText();
+        String expectedMessage = "Row 2 was saved";
+
+        Assert.assertEquals(actualMessage, expectedMessage, "Message is not expected");
+
     }
 
 }

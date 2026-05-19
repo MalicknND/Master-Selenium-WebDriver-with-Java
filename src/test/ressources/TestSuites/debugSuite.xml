@@ -6,7 +6,7 @@
         <classes>
             <class name="com.practicetestautomation.tests.exceptions.ExeptionsTests">
                 <methods>
-                    <include name="timeoutExceptionTest" />
+                    <include name="elementNotInteractableExceptionTest" />
                 </methods>
             </class>
         </classes>
