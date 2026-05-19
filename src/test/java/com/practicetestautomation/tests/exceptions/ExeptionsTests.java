@@ -137,6 +137,20 @@ public class ExeptionsTests {
 
     }
 
+    @Test
+    public void staleElementReferenceExceptionTest() {
+        logger.info("Starting staleElementReferenceExceptionTest");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        WebElement addBtn = driver.findElement(By.id("add_btn"));
+        addBtn.click();
+
+        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("instructions"))));
+
+    }
+
+
 
 }
 
