@@ -42,7 +42,8 @@ public class ExeptionsTests {
                 break;
         }
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        // Implicit wait
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         driver.get("https://practicetestautomation.com/practice-test-exceptions/");
     }
@@ -55,14 +56,15 @@ public class ExeptionsTests {
 
 
     @Test
-    public void noSuchElementExceptionTest(){
+    public void noSuchElementExceptionTest() {
         logger.info("Starting noSuchElementExceptionTest");
 
-        WebElement addBtn  = driver.findElement(By.id("add_btn"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        WebElement addBtn = driver.findElement(By.id("add_btn"));
         addBtn.click();
 
-
-        WebElement rowToInputField = driver.findElement(By.xpath("//div[@id='row2']/input"));
+        WebElement rowToInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
         Assert.assertTrue(rowToInputField.isDisplayed(), "Row 2 input field is not displayed");
 
 
