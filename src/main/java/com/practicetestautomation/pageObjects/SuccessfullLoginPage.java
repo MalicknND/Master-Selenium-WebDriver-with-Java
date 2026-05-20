@@ -15,4 +15,8 @@ public class SuccessfullLoginPage extends BasePage {
     public boolean isLogoutBtnDisplayed() {
         return isDisplayed(logoutBtnLocator);
     }
+
+    public void load(){
+        waitForElement(logoutBtnLocator);
+    }
 }
