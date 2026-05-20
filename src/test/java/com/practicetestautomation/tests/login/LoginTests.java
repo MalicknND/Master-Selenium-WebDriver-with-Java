@@ -2,54 +2,13 @@ package com.practicetestautomation.tests.login;
 
 import com.practicetestautomation.pageObjects.LoginPage;
 import com.practicetestautomation.pageObjects.SuccessfullLoginPage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import com.practicetestautomation.tests.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
-import java.time.Duration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
-public class LoginTests {
-    private WebDriver driver;
-    private Logger logger;
-
-    @BeforeMethod(alwaysRun = true)
-    @Parameters("browser")
-    public void setUp(@Optional("chrome") String browser) {
-
-        logger = Logger.getLogger(LoginTests.class.getName());
-        logger.setLevel(Level.INFO);
-
-        logger.info("Running test in : " + browser);
-        // Open page
-
-        switch (browser.toLowerCase()) {
-            case "chrome":
-                driver = new ChromeDriver();
-                break;
-            case "firefox":
-                driver = new FirefoxDriver();
-                break;
-            default:
-                logger.warning("Config missing for browser: " + browser);
-                driver = new ChromeDriver();
-                break;
-        }
-    }
-
-    @AfterMethod(alwaysRun = true)
-    public void tearDown() {
-        driver.quit();
-        logger.info("Browser Closed");
-    }
+public class LoginTests extends BaseTest {
 
     @Test(groups = {"positive", "regression", "smoke"})
     public void testLoginFunctionality() {

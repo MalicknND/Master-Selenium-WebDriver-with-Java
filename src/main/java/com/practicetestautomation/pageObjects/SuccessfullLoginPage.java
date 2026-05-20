@@ -2,6 +2,7 @@ package com.practicetestautomation.pageObjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 
 public class SuccessfullLoginPage extends BasePage {
@@ -17,6 +18,7 @@ public class SuccessfullLoginPage extends BasePage {
     }
 
     public void load(){
+        wait.until(ExpectedConditions.urlToBe("https://practicetestautomation.com/logged-in-successfully/"));
         waitForElement(logoutBtnLocator);
     }
 }

@@ -26,8 +26,6 @@
     </test>
 
 
-
-
     <test name="Incorrect Username Test">
         <parameter name="browser" value="safari"/>
         <parameter name="username" value="incorrectUser"/>
@@ -55,6 +53,13 @@
                     <include name="negativeLoginTest"/>
                 </methods>
             </class>
+        </classes>
+    </test>
+
+    <test name="Exceptions Test">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="com.practicetestautomation.tests.exceptions.ExeptionsTests"></class>
         </classes>
     </test>
 </suite>

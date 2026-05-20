@@ -20,28 +20,53 @@ Ce depot accompagne ma progression dans le cours **Boost Your QA Career with Sel
 - Maven
 - Selenium WebDriver 4.44.0
 - TestNG 7.12.0
-- ChromeDriver, FirefoxDriver via Selenium Manager
+- Maven Surefire Plugin 3.5.5
+- ChromeDriver et FirefoxDriver via Selenium Manager
 
 ## Structure du projet
 
 ```text
 .
 ├── pom.xml
+├── README.md
 ├── src
+│   ├── main
+│   │   └── java
+│   │       └── com/practicetestautomation/pageObjects
+│   │           ├── BasePage.java
+│   │           ├── ExceptionsPage.java
+│   │           ├── LoginPage.java
+│   │           └── SuccessfullLoginPage.java
 │   └── test
 │       ├── java
-│       │   └── com/practicetestautomation/tests/login/LoginTests.java
+│       │   └── com/practicetestautomation/tests
+│       │       ├── exceptions/ExeptionsTests.java
+│       │       └── login/LoginTests.java
 │       └── ressources
 │           └── TestSuites
+│               ├── debugSuite.xml
 │               ├── fullRegressionSuite.xml
 │               └── smokeTestSuite.xml
 └── target
     └── surefire-reports
 ```
 
+## Page Object Model
+
+Le projet utilise maintenant des page objects pour isoler les interactions Selenium des tests :
+
+- `BasePage` : navigation, URL courante, source de page, attentes explicites et helpers d'affichage.
+- `LoginPage` : ouverture de la page de login, saisie des identifiants, soumission et lecture des messages d'erreur.
+- `SuccessfullLoginPage` : verification de la page apres connexion et presence du bouton `Log out`.
+- `ExceptionsPage` : actions sur la page d'exemples d'exceptions Selenium.
+
+Cette structure rend les tests plus lisibles et limite la duplication des locators et des attentes explicites.
+
 ## Tests actuellement implementes
 
-Le fichier `LoginTests.java` contient les premiers tests sur la page :
+### Login
+
+Les tests de login ciblent :
 
 ```text
 https://practicetestautomation.com/practice-test-login/
@@ -50,12 +75,28 @@ https://practicetestautomation.com/practice-test-login/
 Scenarios couverts :
 
 - Connexion positive avec l'utilisateur `student` et le mot de passe `Password123`.
-- Connexion negative avec un nom d'utilisateur incorrect.
-- Connexion negative avec un mot de passe incorrect.
 - Verification de l'URL apres connexion.
 - Verification du message de succes.
 - Verification du bouton `Log out`.
+- Connexion negative avec un nom d'utilisateur incorrect.
+- Connexion negative avec un mot de passe incorrect.
 - Verification des messages d'erreur.
+
+### Exceptions Selenium
+
+Les tests d'exceptions ciblent :
+
+```text
+https://practicetestautomation.com/practice-test-exceptions/
+```
+
+Scenarios couverts :
+
+- `NoSuchElementException` : attendre l'apparition de la ligne 2 apres clic sur `Add`.
+- `TimeoutException` : utiliser une attente explicite pour un element ajoute dynamiquement.
+- `ElementNotInteractableException` : remplir et sauvegarder la ligne 2 apres son affichage.
+- `InvalidElementStateException` : activer le champ de la ligne 1 avec `Edit`, modifier puis sauvegarder.
+- `StaleElementReferenceException` : verifier la disparition des instructions apres modification de la page.
 
 ## Prerequis
 
@@ -92,6 +133,12 @@ Lancer explicitement la suite de regression :
 mvn test -DsuiteXmlFile=fullRegressionSuite.xml
 ```
 
+Lancer la suite de debug :
+
+```bash
+mvn test -DsuiteXmlFile=debugSuite.xml
+```
+
 ## Suites TestNG
 
 Les suites sont configurees dans :
@@ -112,9 +159,15 @@ Par defaut, la suite executee est :
 fullRegressionSuite.xml
 ```
 
+Suites disponibles :
+
+- `fullRegressionSuite.xml` : scenarios principaux de regression sur le login.
+- `smokeTestSuite.xml` : tests marques avec le groupe TestNG `smoke`.
+- `debugSuite.xml` : suite reduite pour lancer rapidement un test cible.
+
 ## Navigateurs
 
-La methode `setUp()` accepte un parametre TestNG `browser`.
+Les methodes `setUp()` acceptent un parametre TestNG `browser`.
 
 Valeurs gerees actuellement :
 
@@ -139,11 +192,11 @@ Fichiers utiles :
 
 ## Progression prevue
 
-- Ajouter davantage de tests fonctionnels.
-- Remplacer progressivement les `Thread.sleep()` par des attentes explicites.
-- Introduire le Page Object Model.
+- Continuer la migration des tests vers le Page Object Model.
 - Centraliser la configuration des navigateurs.
-- Ajouter des tests cross-browser plus complets.
+- Ajouter davantage de tests fonctionnels.
+- Renforcer les suites TestNG par groupes et par navigateurs.
+- Nettoyer les noms de classes et fichiers contenant des fautes de frappe.
 - Ameliorer la lisibilite et la maintenabilite du framework.
 
 ## Note personnelle

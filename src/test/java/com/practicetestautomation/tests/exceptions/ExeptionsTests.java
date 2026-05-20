@@ -1,7 +1,8 @@
 package com.practicetestautomation.tests.exceptions;
 
+import com.practicetestautomation.pageObjects.ExceptionsPage;
+import com.practicetestautomation.tests.BaseTest;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,94 +17,39 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class ExeptionsTests {
-    private WebDriver driver;
-    private Logger logger;
-
-    @BeforeMethod(alwaysRun = true)
-    @Parameters("browser")
-    public void setUp(@Optional("chrome") String browser) {
-
-        logger = Logger.getLogger(ExeptionsTests.class.getName());
-        logger.setLevel(Level.INFO);
-
-        logger.info("Running test in : " + browser);
-        // Open page
-
-        switch (browser.toLowerCase()) {
-            case "chrome":
-                driver = new ChromeDriver();
-                break;
-            case "firefox":
-                driver = new FirefoxDriver();
-                break;
-            default:
-                logger.warning("Config missing for browser: " + browser);
-                driver = new ChromeDriver();
-                break;
-        }
-
-        // Implicit wait
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        driver.get("https://practicetestautomation.com/practice-test-exceptions/");
-    }
-
-    @AfterMethod(alwaysRun = true)
-    public void tearDown() {
-        driver.quit();
-        logger.info("Browser Closed");
-    }
-
+public class ExeptionsTests extends BaseTest {
 
     @Test
     public void noSuchElementExceptionTest() {
         logger.info("Starting noSuchElementExceptionTest");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        WebElement addBtn = driver.findElement(By.id("add_btn"));
-        addBtn.click();
-
-        WebElement row2InputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
-        Assert.assertTrue(row2InputField.isDisplayed(), "Row 2 input field is not displayed");
+        ExceptionsPage exceptionsPage = new ExceptionsPage(driver);
+        exceptionsPage.visit();
+        exceptionsPage.pushAddBtn();
+        Assert.assertTrue(exceptionsPage.isRowTwoDisplayedAfterWait(), "Row 2 input field is not displayed");
     }
 
     @Test
     public void timeoutExceptionTest() {
         logger.info("Starting timeoutExceptionTest");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
-        WebElement addBtn = driver.findElement(By.id("add_btn"));
-        addBtn.click();
-
-        WebElement row2InputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
-        Assert.assertTrue(row2InputField.isDisplayed(), "Row 2 input field is not displayed");
+        ExceptionsPage exceptionsPage = new ExceptionsPage(driver);
+        exceptionsPage.visit();
+        exceptionsPage.pushAddBtn();
+        Assert.assertTrue(exceptionsPage.isRowTwoDisplayedAfterWait(), "Row 2 input field is not displayed");
     }
 
     @Test
     public void elementNotInteractableExceptionTest() {
         logger.info("Starting elementNotInteractableExceptionTest");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
-        WebElement addBtn = driver.findElement(By.id("add_btn"));
-        addBtn.click();
-
-        WebElement row2InputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row2']/input")));
-        row2InputField.sendKeys("Sushi");
-
-        // il yavait plusieurs boutton Save
-        WebElement saveBtn = driver.findElement(By.xpath("//div[@id='row2']/button[@name='Save']"));
-        saveBtn.click();
-
-        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("confirmation")));
-
-        String actualMessage = successMessage.getText();
-        String expectedMessage = "Row 2 was saved";
-
-        Assert.assertEquals(actualMessage, expectedMessage, "Message is not expected");
+        ExceptionsPage exceptionsPage = new ExceptionsPage(driver);
+        exceptionsPage.visit();
+        exceptionsPage.pushAddBtn();
+        exceptionsPage.isRowTwoDisplayedAfterWait();
+        exceptionsPage.enterFoodInRow2("Sushi");
+        exceptionsPage.saveRow2();
+        Assert.assertEquals(exceptionsPage.successMessage(), "Row 2 was saved", "Message is not expected");
 
     }
 
@@ -111,29 +57,12 @@ public class ExeptionsTests {
     public void invalidElementStateExceptionTest() {
         logger.info("Starting elementNotInteractableExceptionTest");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // clique d'abord pour mettre le disable à false avant de clear et remplir pour eviter l'erreur
-        WebElement editBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("edit_btn")));
-        editBtn.click();
-
-        WebElement row1InputField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='row1']/input")));
-
-
-        row1InputField.clear();
-        row1InputField.sendKeys("Sushi");
-
-
-
-        WebElement saveBtn = driver.findElement(By.xpath("//div[@id='row1']/button[@name='Save']"));
-        saveBtn.click();
-
-        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("confirmation")));
-
-        String actualMessage = successMessage.getText();
-        String expectedMessage = "Row 1 was saved";
-
-        Assert.assertEquals(actualMessage, expectedMessage, "Message is not expected");
+        ExceptionsPage exceptionsPage = new ExceptionsPage(driver);
+        exceptionsPage.visit();
+        exceptionsPage.pushEditBtn();
+        exceptionsPage.enterFoodInRow1("Sushi");
+        exceptionsPage.saveRow1();
+        Assert.assertEquals(exceptionsPage.successMessage(), "Row 1 was saved", "Message is not expected");
 
     }
 
@@ -141,16 +70,12 @@ public class ExeptionsTests {
     public void staleElementReferenceExceptionTest() {
         logger.info("Starting staleElementReferenceExceptionTest");
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        WebElement addBtn = driver.findElement(By.id("add_btn"));
-        addBtn.click();
-
-        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("instructions"))));
+        ExceptionsPage exceptionsPage = new ExceptionsPage(driver);
+        exceptionsPage.visit();
+        exceptionsPage.pushAddBtn();
+        Assert.assertTrue(exceptionsPage.isInstructionsElementHiddenAfterWait(), "Instructions element is not hidden");
 
     }
-
-
 
 }
 
