@@ -1,6 +1,7 @@
 package com.practicetestautomation.pageObjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -28,6 +29,14 @@ public class BasePage {
 
     protected WebElement waitForElement(By locator) {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    protected boolean isDisplayed(By locator) {
+        try {
+            return driver.findElement(locator).isDisplayed();
+        } catch (NoSuchElementException ex) {
+            return false;
+        }
     }
 
 }
